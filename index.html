@@ -207,7 +207,7 @@
     <div class="chips" id="freeChips">
       <button class="chip active" data-platform="all">Todos</button>
       <button class="chip" data-platform="steam">Steam</button>
-      <button class="chip" data-platform="epic-games-store">Epic Games</button>
+      <button class="chip" data-platform="epic games|epic-games-store">Epic Games</button>
       <button class="chip" data-platform="gog">GOG</button>
       <button class="chip" data-platform="ubisoft">Ubisoft</button>
       <button class="chip" data-platform="ps4|ps5|playstation">PlayStation</button>
@@ -234,7 +234,9 @@
         <option value="Price-asc">Precio: menor a mayor</option>
         <option value="Price-desc">Precio: mayor a menor</option>
         <option value="Deal Rating">Mejor valoradas</option>
-        <option value="Recent">Más recientes</option>
+        <option value="Reviews">Más popular (número de reseñas)</option>
+        <option value="Metacritic">Mejor puntuación Metacritic</option>
+        <option value="Release">Más recientes</option>
       </select>
     </div>
     <div class="price-range-row">
@@ -428,13 +430,24 @@ function renderDeals(deals, append = false){
     if(!append) grid.innerHTML = '<div class="state-msg">No se encontraron ofertas para esa búsqueda.</div>';
     return;
   }
-  const html = deals.map(d => `
+  const html = deals.map(d => {
+    const reviewCount = Number(d.steamRatingCount || 0);
+    const metacritic = Number(d.metacriticScore || 0);
+    let popBadge = '';
+    if(reviewCount > 0){
+      const formatted = reviewCount >= 1000 ? Math.round(reviewCount/1000) + 'k' : reviewCount;
+      popBadge = `<span>⭐ ${d.steamRatingPercent || ''}% · ${formatted} reseñas</span>`;
+    } else if(metacritic > 0){
+      popBadge = `<span>Metacritic ${metacritic}</span>`;
+    }
+    return `
     <a class="card" href="https://www.cheapshark.com/redirect?dealID=${d.dealID}" target="_blank" rel="noopener">
       <img class="card-img" src="${d.thumb}" alt="" loading="lazy" onerror="this.style.display='none'">
       <div class="card-body">
         <div class="card-title">${escapeHtml(d.title)}</div>
         <div class="card-meta">
           <span class="pill pill-discount">-${Math.round(d.savings)}%</span>
+          ${popBadge}
         </div>
         <div class="price-row">
           <span class="price-new">$${d.salePrice}</span>
@@ -442,7 +455,8 @@ function renderDeals(deals, append = false){
         </div>
       </div>
     </a>
-  `).join('');
+  `;
+  }).join('');
   if(append) grid.insertAdjacentHTML('beforeend', html);
   else grid.innerHTML = html;
 }
