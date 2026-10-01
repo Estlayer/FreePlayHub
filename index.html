@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FreePlayHub — Juegos gratis y ofertas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10121b;
+    --bg-soft: #171a26;
+    --surface: #1d2131;
+    --surface-hover: #262b3f;
+    --border: #2b3049;
+    --text: #eceef5;
+    --text-muted: #8d92ab;
+    --gold: #f2b705;
+    --gold-dim: #6b5817;
+    --teal: #4fd1a5;
+    --teal-dim: #163b30;
+    --coral: #f2665a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 1200px 600px at 15% -10%, rgba(242,183,5,0.08), transparent 60%),
+      radial-gradient(ellipse 900px 500px at 100% 0%, rgba(79,209,165,0.07), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Manrope', system-ui, sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk', system-ui, sans-serif;}
+
+  a{color:inherit;}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px 80px;}
+
+  /* HEADER */
+  header{
+    padding:36px 0 8px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .brand{display:flex;align-items:baseline;gap:10px;}
+  .brand-mark{
+    width:38px;height:38px;border-radius:10px;
+    background:linear-gradient(135deg, var(--gold), var(--coral));
+    display:inline-flex;align-items:center;justify-content:center;
+    font-size:19px;flex:none;
+  }
+  .brand h1{font-size:23px;margin:0;letter-spacing:-0.01em;}
+  .brand span.tag{display:block;font-size:12.5px;color:var(--text-muted);font-family:'Manrope';font-weight:500;margin-top:1px;}
+
+  .refresh-btn{
+    background:var(--surface);border:1px solid var(--border);color:var(--text-muted);
+    padding:9px 14px;border-radius:9px;font-size:13px;cursor:pointer;font-weight:600;
+    display:flex;align-items:center;gap:6px;transition:.15s;
+  }
+  .refresh-btn:hover{background:var(--surface-hover);color:var(--text);}
+  .refresh-btn.spinning svg{animation:spin 0.8s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* HERO STAT */
+  .hero{
+    margin-top:28px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:linear-gradient(160deg, var(--surface), var(--bg-soft));
+    padding:28px 30px;
+    display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center;
+  }
+  .hero-num{font-size:44px;font-weight:700;line-height:1;letter-spacing:-0.02em;}
+  .hero-num .accent{color:var(--gold);}
+  .hero-sub{color:var(--text-muted);font-size:14.5px;margin-top:8px;line-height:1.5;max-width:480px;}
+  .hero-loading{color:var(--text-muted);font-size:15px;}
+  .hero-badge{
+    background:var(--teal-dim);color:var(--teal);border:1px solid rgba(79,209,165,0.35);
+    padding:6px 12px;border-radius:100px;font-size:12.5px;font-weight:700;white-space:nowrap;
+  }
+  @media(max-width:560px){.hero{grid-template-columns:1fr;}}
+
+  /* TABS */
+  .tabs{display:flex;gap:8px;margin:32px 0 18px;border-bottom:1px solid var(--border);}
+  .tab-btn{
+    background:none;border:none;color:var(--text-muted);font-family:'Space Grotesk';
+    font-size:15.5px;font-weight:600;padding:12px 4px;cursor:pointer;position:relative;
+    margin-right:22px;
+  }
+  .tab-btn.active{color:var(--text);}
+  .tab-btn.active::after{
+    content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--gold);border-radius:2px;
+  }
+
+  /* FILTER CHIPS */
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px;}
+  .chip{
+    background:var(--surface);border:1px solid var(--border);color:var(--text-muted);
+    padding:7px 14px;border-radius:100px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;
+  }
+  .chip:hover{border-color:#3a4063;color:var(--text);}
+  .chip.active{background:var(--gold);border-color:var(--gold);color:#211a02;}
+
+  .search-row{display:flex;gap:10px;margin-bottom:18px;}
+  .search-row input{
+    flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);
+    padding:10px 14px;border-radius:10px;font-size:14px;font-family:'Manrope';
+  }
+  .search-row input:focus{outline:none;border-color:var(--gold);}
+  .search-row input::placeholder{color:var(--text-muted);}
+  .search-row select{
+    background:var(--surface);border:1px solid var(--border);color:var(--text);
+    padding:10px 14px;border-radius:10px;font-size:13.5px;font-family:'Manrope';font-weight:600;cursor:pointer;
+  }
+  .search-row select:focus{outline:none;border-color:var(--gold);}
+
+  .price-range-row{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+  .price-range-row label{font-size:13px;color:var(--text-muted);font-weight:700;margin-right:2px;}
+  .price-range-row span{color:var(--text-muted);}
+  .price-range-row input[type=number]{
+    width:84px;background:var(--surface);border:1px solid var(--border);color:var(--text);
+    padding:8px 10px;border-radius:9px;font-size:13.5px;font-family:'Manrope';
+  }
+  .price-range-row input[type=number]:focus{outline:none;border-color:var(--gold);}
+  .price-range-row .chip{padding:7px 13px;}
+  @media(max-width:480px){.search-row{flex-wrap:wrap;} .search-row select{flex:1;}}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill, minmax(240px,1fr));gap:16px;}
+  .card{
+    background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+    display:flex;flex-direction:column;transition:.15s; text-decoration:none;
+  }
+  .card:hover{border-color:#3a4063;transform:translateY(-2px);}
+  .card-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--bg-soft);display:block;}
+  .card-body{padding:14px 15px 16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+  .card-title{font-size:14.5px;font-weight:700;line-height:1.3;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+  .card-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--text-muted);margin-top:auto;}
+  .pill{padding:3px 9px;border-radius:100px;font-weight:700;font-size:11.5px;}
+  .pill-free{background:var(--teal-dim);color:var(--teal);}
+  .pill-discount{background:rgba(242,101,90,0.15);color:var(--coral);}
+  .price-row{display:flex;align-items:baseline;gap:8px;}
+  .price-new{font-weight:800;font-size:16px;color:var(--teal);}
+  .price-old{font-size:12.5px;color:var(--text-muted);text-decoration:line-through;}
+
+  .state-msg{
+    grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--text-muted);font-size:14.5px;
+  }
+  .state-msg.error{color:var(--coral);}
+
+  .skel{background:linear-gradient(90deg, var(--surface) 25%, var(--surface-hover) 50%, var(--surface) 75%);
+    background-size:200% 100%;animation:shimmer 1.4s infinite;}
+  @keyframes shimmer{to{background-position:-200% 0;}}
+  .skel-card{border-radius:14px;border:1px solid var(--border);overflow:hidden;}
+  .skel-card .skel{height:135px;}
+  .skel-line{height:12px;margin:14px 15px;border-radius:4px;}
+  .skel-line.w60{width:60%;}
+
+  .manual-links{
+    margin-top:26px;padding:18px 20px;border:1px dashed var(--border);border-radius:14px;
+    font-size:13.5px;color:var(--text-muted);line-height:1.7;
+  }
+  .manual-links a{color:var(--gold);font-weight:700;text-decoration:none;}
+  .manual-links a:hover{text-decoration:underline;}
+
+  footer{margin-top:50px;padding-top:22px;border-top:1px solid var(--border);
+    color:var(--text-muted);font-size:12.5px;line-height:1.7;}
+  footer a{color:var(--text-muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="brand">
+      <span class="brand-mark">🎮</span>
+      <div>
+        <h1>Botín</h1>
+        <span class="tag">Juegos gratis y ofertas, en un solo lugar</span>
+      </div>
+    </div>
+    <button class="refresh-btn" id="refreshBtn">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      Actualizar
+    </button>
+  </header>
+
+  <div class="hero" id="hero">
+    <div>
+      <div class="hero-num hero-loading" id="heroNum">Cargando datos en vivo…</div>
+      <div class="hero-sub">Valor total estimado de los juegos que puedes reclamar gratis ahora mismo, sumando Steam, Epic Games, GOG, PlayStation, Xbox y más.</div>
+    </div>
+    <div class="hero-badge" id="heroBadge" style="display:none;">EN VIVO</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="free">Juegos gratis</button>
+    <button class="tab-btn" data-tab="deals">Mejores ofertas</button>
+  </div>
+
+  <!-- FREE GAMES TAB -->
+  <div id="tab-free">
+    <div class="chips" id="freeChips">
+      <button class="chip active" data-platform="all">Todos</button>
+      <button class="chip" data-platform="steam">Steam</button>
+      <button class="chip" data-platform="epic-games-store">Epic Games</button>
+      <button class="chip" data-platform="gog">GOG</button>
+      <button class="chip" data-platform="ubisoft">Ubisoft</button>
+      <button class="chip" data-platform="ps4|ps5|playstation">PlayStation</button>
+      <button class="chip" data-platform="xbox">Xbox</button>
+      <button class="chip" data-platform="switch">Switch</button>
+    </div>
+    <div class="grid" id="freeGrid">
+      <div class="state-msg">Cargando juegos gratis…</div>
+    </div>
+    <div class="manual-links">
+      Nota: no existe una API pública y gratuita que confirme en tiempo real los "juegos gratis del mes" oficiales de PlayStation Plus o Xbox Game Pass — esta sección muestra regalos y promociones activas detectadas por GamerPower.com, que suele incluirlos poco después de anunciarse. Para la lista oficial y garantizada, revisa directamente
+      <a href="https://www.playstation.com/es-mx/ps-plus/whats-new/" target="_blank" rel="noopener">PlayStation Plus</a> ·
+      <a href="https://www.xbox.com/es-mx/xbox-game-pass" target="_blank" rel="noopener">Xbox Game Pass</a> ·
+      <a href="https://store.epicgames.com/es-MX/free-games" target="_blank" rel="noopener">Epic Games</a>.
+    </div>
+  </div>
+
+  <!-- DEALS TAB -->
+  <div id="tab-deals" style="display:none;">
+    <div class="search-row">
+      <input type="text" id="dealSearch" placeholder="Buscar un juego (ej. Elden Ring)…">
+      <select id="dealSort">
+        <option value="Savings">Mayor descuento</option>
+        <option value="Price-asc">Precio: menor a mayor</option>
+        <option value="Price-desc">Precio: mayor a menor</option>
+        <option value="Deal Rating">Mejor valoradas</option>
+        <option value="Recent">Más recientes</option>
+      </select>
+    </div>
+    <div class="price-range-row">
+      <label for="priceMin">Precio</label>
+      <input type="number" id="priceMin" min="0" step="1" placeholder="Mín">
+      <span>—</span>
+      <input type="number" id="priceMax" min="0" step="1" placeholder="Máx">
+      <button class="chip" id="applyPriceBtn" type="button">Aplicar</button>
+      <button class="chip" id="clearPriceBtn" type="button" style="display:none;">Quitar rango</button>
+    </div>
+    <div class="chips" id="dealChips">
+      <button class="chip active" data-store="">Todas las tiendas</button>
+    </div>
+    <div class="grid" id="dealsGrid">
+      <div class="state-msg">Cargando ofertas…</div>
+    </div>
+    <div style="text-align:center;margin-top:20px;">
+      <button class="refresh-btn" id="loadMoreBtn" style="display:none;">Cargar más ofertas</button>
+    </div>
+    <div class="manual-links">
+      Nota: esta sección cubre tiendas de PC (Steam, Epic, GOG, Humble, Fanatical y otras) a través de CheapShark, el mejor comparador de precios público. Las tiendas de consola no exponen una API pública gratuita de ofertas, así que para esas revisa directamente
+      <a href="https://store.playstation.com/es-mx/pages/deals" target="_blank" rel="noopener">PlayStation Store</a> ·
+      <a href="https://www.xbox.com/es-mx/games/deals" target="_blank" rel="noopener">Xbox</a>.
+    </div>
+  </div>
+
+  <footer>
+    Datos de juegos gratis vía <a href="https://www.gamerpower.com" target="_blank" rel="noopener">GamerPower.com</a>. Datos de ofertas vía <a href="https://www.cheapshark.com" target="_blank" rel="noopener">CheapShark.com</a>. Los precios y promociones pueden cambiar; verifica siempre en la tienda antes de comprar o reclamar.
+  </footer>
+
+</div>
+
+<script>
+const GP_BASE = 'https://www.gamerpower.com/api';
+const CS_BASE = 'https://www.cheapshark.com/api/1.0';
+const PROXY = 'https://api.allorigins.win/raw?url=';
+
+async function fetchJSON(url){
+  try{
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('bad status');
+    return await r.json();
+  }catch(e){
+    // fallback through a CORS proxy in case the API blocks the browser origin
+    const r2 = await fetch(PROXY + encodeURIComponent(url));
+    if(!r2.ok) throw new Error('proxy failed too');
+    return await r2.json();
+  }
+}
+
+function fmtDate(str){
+  if(!str || str.toLowerCase().includes('n/a')) return 'Sin fecha límite anunciada';
+  const d = new Date(str);
+  if(isNaN(d)) return str;
+  return 'Termina el ' + d.toLocaleDateString('es-ES', {day:'numeric', month:'short', year:'numeric'});
+}
+
+function escapeHtml(s){
+  return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ---------------- HERO ---------------- */
+async function loadHero(){
+  try{
+    const data = await fetchJSON(GP_BASE + '/worth?type=game');
+    const el = document.getElementById('heroNum');
+    el.classList.remove('hero-loading');
+    el.innerHTML = `<span class="accent">${data.total_worth}</span> en <span class="accent">${data.active_giveaways_number}</span> juegos gratis ahora`;
+    document.getElementById('heroBadge').style.display = 'inline-block';
+  }catch(e){
+    document.getElementById('heroNum').textContent = 'No se pudo cargar el resumen en vivo.';
+  }
+}
+
+/* ---------------- FREE GAMES ---------------- */
+let allGiveaways = [];
+
+async function loadGiveaways(){
+  const grid = document.getElementById('freeGrid');
+  grid.innerHTML = skeletons(8);
+  try{
+    allGiveaways = await fetchJSON(GP_BASE + '/giveaways?type=game&sort-by=value');
+    renderGiveaways('all');
+  }catch(e){
+    grid.innerHTML = '<div class="state-msg error">No se pudieron cargar los juegos gratis en este momento. Intenta actualizar en unos segundos.</div>';
+  }
+}
+
+function renderGiveaways(platformKey){
+  const grid = document.getElementById('freeGrid');
+  let list = allGiveaways;
+  if(platformKey !== 'all'){
+    const needles = platformKey.split('|');
+    list = allGiveaways.filter(g => {
+      const hay = ((g.platforms||'') + ' ' + (g.title||'') + ' ' + (g.description||'')).toLowerCase();
+      return needles.some(n => hay.includes(n));
+    });
+  }
+  if(!list.length){
+    grid.innerHTML = '<div class="state-msg">No hay regalos activos para este filtro ahora mismo. Prueba con "Todos" o vuelve más tarde.</div>';
+    return;
+  }
+  grid.innerHTML = list.map(g => `
+    <a class="card" href="${g.open_giveaway_url || g.gamerpower_url}" target="_blank" rel="noopener">
+      <img class="card-img" src="${g.thumbnail || g.image}" alt="" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-title">${escapeHtml(g.title)}</div>
+        <div class="card-meta">
+          <span class="pill pill-free">GRATIS</span>
+          <span>${escapeHtml(g.worth && g.worth !== 'N/A' ? g.worth : '')}</span>
+        </div>
+        <div class="card-meta">${fmtDate(g.end_date)}</div>
+      </div>
+    </a>
+  `).join('');
+}
+
+document.getElementById('freeChips').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  document.querySelectorAll('#freeChips .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  renderGiveaways(btn.dataset.platform);
+});
+
+/* ---------------- DEALS ---------------- */
+let storeMap = {}; // name -> id
+let currentStoreID = '';
+let currentSort = 'Savings';
+let currentMinPrice = '';
+let currentMaxPrice = '';
+let currentTitle = '';
+let currentPage = 0;
+let dealsSearchTimer = null;
+
+async function loadStores(){
+  try{
+    const stores = await fetchJSON(CS_BASE + '/stores');
+    const wanted = ['Steam','Epic Games Store','GOG','Humble Store','Fanatical','Green Man Gaming','Ubisoft Store'];
+    const chipsEl = document.getElementById('dealChips');
+    stores.filter(s => s.isActive && wanted.some(w => s.storeName.toLowerCase().includes(w.toLowerCase())))
+      .forEach(s => {
+        storeMap[s.storeName] = s.storeID;
+        const btn = document.createElement('button');
+        btn.className = 'chip';
+        btn.dataset.store = s.storeID;
+        btn.textContent = s.storeName;
+        chipsEl.appendChild(btn);
+      });
+  }catch(e){ /* chips are optional; deals still load with no store filter */ }
+}
+
+async function loadDeals(storeID = currentStoreID, title = currentTitle, append = false){
+  currentStoreID = storeID;
+  currentTitle = title;
+  if(!append) currentPage = 0;
+
+  const grid = document.getElementById('dealsGrid');
+  const moreBtn = document.getElementById('loadMoreBtn');
+  if(!append) grid.innerHTML = skeletons(8);
+  moreBtn.textContent = 'Cargando…';
+  moreBtn.disabled = true;
+
+  // "Price-asc" / "Price-desc" both map to CheapShark's sortBy=Price, with `desc` flipping direction
+  let sortBy = currentSort;
+  let desc = 1;
+  if(currentSort === 'Price-asc'){ sortBy = 'Price'; desc = 0; }
+  if(currentSort === 'Price-desc'){ sortBy = 'Price'; desc = 1; }
+
+  let url = CS_BASE + '/deals?pageSize=60&pageNumber=' + currentPage + '&onSale=1&sortBy=' + encodeURIComponent(sortBy) + '&desc=' + desc;
+  if(title) url += '&title=' + encodeURIComponent(title);
+  if(storeID) url += '&storeID=' + storeID;
+  if(currentMinPrice !== '') url += '&lowerPrice=' + currentMinPrice;
+  if(currentMaxPrice !== '') url += '&upperPrice=' + currentMaxPrice;
+
+  try{
+    const deals = await fetchJSON(url);
+    renderDeals(deals, append);
+    moreBtn.style.display = (deals && deals.length >= 60) ? '' : 'none';
+    moreBtn.textContent = 'Cargar más ofertas';
+    moreBtn.disabled = false;
+  }catch(e){
+    if(!append) grid.innerHTML = '<div class="state-msg error">No se pudieron cargar las ofertas en este momento. Intenta actualizar en unos segundos.</div>';
+    moreBtn.style.display = 'none';
+  }
+}
+
+function renderDeals(deals, append = false){
+  const grid = document.getElementById('dealsGrid');
+  if(!deals || !deals.length){
+    if(!append) grid.innerHTML = '<div class="state-msg">No se encontraron ofertas para esa búsqueda.</div>';
+    return;
+  }
+  const html = deals.map(d => `
+    <a class="card" href="https://www.cheapshark.com/redirect?dealID=${d.dealID}" target="_blank" rel="noopener">
+      <img class="card-img" src="${d.thumb}" alt="" loading="lazy" onerror="this.style.display='none'">
+      <div class="card-body">
+        <div class="card-title">${escapeHtml(d.title)}</div>
+        <div class="card-meta">
+          <span class="pill pill-discount">-${Math.round(d.savings)}%</span>
+        </div>
+        <div class="price-row">
+          <span class="price-new">$${d.salePrice}</span>
+          ${d.normalPrice !== d.salePrice ? `<span class="price-old">$${d.normalPrice}</span>` : ''}
+        </div>
+      </div>
+    </a>
+  `).join('');
+  if(append) grid.insertAdjacentHTML('beforeend', html);
+  else grid.innerHTML = html;
+}
+
+document.getElementById('dealChips').addEventListener('click', e => {
+  const btn = e.target.closest('.chip');
+  if(!btn) return;
+  document.querySelectorAll('#dealChips .chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  currentStoreID = btn.dataset.store;
+  document.getElementById('dealSearch').value = '';
+  loadDeals(currentStoreID);
+});
+
+document.getElementById('dealSearch').addEventListener('input', e => {
+  clearTimeout(dealsSearchTimer);
+  const val = e.target.value.trim();
+  dealsSearchTimer = setTimeout(() => {
+    if(val.length >= 2) loadDeals(currentStoreID, val);
+    else loadDeals(currentStoreID);
+  }, 450);
+});
+
+document.getElementById('dealSort').addEventListener('change', e => {
+  currentSort = e.target.value;
+  loadDeals(currentStoreID, document.getElementById('dealSearch').value.trim());
+});
+
+document.getElementById('applyPriceBtn').addEventListener('click', () => {
+  const min = document.getElementById('priceMin').value;
+  const max = document.getElementById('priceMax').value;
+  currentMinPrice = min !== '' ? Math.max(0, Number(min)) : '';
+  currentMaxPrice = max !== '' ? Math.max(0, Number(max)) : '';
+  document.getElementById('clearPriceBtn').style.display = (currentMinPrice !== '' || currentMaxPrice !== '') ? '' : 'none';
+  loadDeals(currentStoreID, document.getElementById('dealSearch').value.trim());
+});
+
+document.getElementById('clearPriceBtn').addEventListener('click', () => {
+  currentMinPrice = ''; currentMaxPrice = '';
+  document.getElementById('priceMin').value = '';
+  document.getElementById('priceMax').value = '';
+  document.getElementById('clearPriceBtn').style.display = 'none';
+  loadDeals(currentStoreID, document.getElementById('dealSearch').value.trim());
+});
+
+document.getElementById('loadMoreBtn').addEventListener('click', () => {
+  currentPage += 1;
+  loadDeals(currentStoreID, currentTitle, true);
+});
+
+/* ---------------- TABS ---------------- */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('tab-free').style.display = tab === 'free' ? '' : 'none';
+    document.getElementById('tab-deals').style.display = tab === 'deals' ? '' : 'none';
+  });
+});
+
+/* ---------------- SKELETONS ---------------- */
+function skeletons(n){
+  return Array.from({length:n}).map(() => `
+    <div class="skel-card">
+      <div class="skel"></div>
+      <div class="skel skel-line"></div>
+      <div class="skel skel-line w60"></div>
+    </div>
+  `).join('');
+}
+
+/* ---------------- REFRESH ---------------- */
+async function loadAll(){
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  await Promise.all([loadHero(), loadGiveaways(), loadDeals(currentStoreID)]);
+  btn.classList.remove('spinning');
+}
+document.getElementById('refreshBtn').addEventListener('click', loadAll);
+
+/* ---------------- INIT ---------------- */
+loadHero();
+loadGiveaways();
+loadStores().then(() => loadDeals());
+</script>
+</body>
+</html>
